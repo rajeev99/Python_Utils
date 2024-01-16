@@ -1,0 +1,54 @@
+<!-- Step 3: Create a template file (templates/index.html) -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Anonymization Portal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Data Anonymization Portal</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="file">Choose CSV File</label>
+                <input type="file" class="form-control-file" id="file" name="file" accept=".csv" required>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Column Name</th>
+                        <th>Choose Fake Field</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for column in form.columns %}
+                        <tr>
+                            <td>{{ column.label }}</td>
+                            <td>
+                                <select class="form-control" name="columns">
+                                    {% for field in form.fake_fields %}
+                                        <option value="{{ field[0] }}">{{ field[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Anonymize Data</button>
+        </form>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-success mt-3" role="alert">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
